@@ -1,0 +1,618 @@
+[
+    [
+        {
+            "locationId": "00007b2600db79013970c991506765d48bceab8277812141f45f977996e64b5f",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 43200,
+            "energyGrowth": 3.597,
+            "silverCap": 12000,
+            "silverGrowth": 0,
+            "energy": 43199.318193665415,
+            "silver": 11696,
+            "range": 2001,
+            "speed": 75,
+            "defense": 300,
+            "lastUpdated": 1622619945.962,
+            "upgradeState": [
+                0,
+                3,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 14400,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 188638,
+                    "y": -82724
+                },
+                "hash": "00007b2600db79013970c991506765d48bceab8277812141f45f977996e64b5f",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        0
+    ],
+    [
+        {
+            "locationId": "0000b4df00afdce901300dc7c4beef0d3b432038179061ee5e009d7f601b84e6",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 4,
+            "isHomePlanet": false,
+            "energyCap": 125000,
+            "energyGrowth": 0,
+            "silverCap": 120000,
+            "silverGrowth": 0,
+            "energy": 14960.899,
+            "silver": 3567,
+            "range": 1025,
+            "speed": 37,
+            "defense": 300,
+            "lastUpdated": 1622619938.981,
+            "upgradeState": [
+                0,
+                0,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 0,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                true,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 188103,
+                    "y": -82904
+                },
+                "hash": "0000b4df00afdce901300dc7c4beef0d3b432038179061ee5e009d7f601b84e6",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        564.468776815866
+    ],
+    [
+        {
+            "locationId": "000001be00b53ea1ff2806ead501fdfb738172cfbce1522dee8cefed14edfcdf",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 43200,
+            "energyGrowth": 7.197,
+            "silverCap": 12000,
+            "silverGrowth": 0,
+            "energy": 43200,
+            "silver": 12000,
+            "range": 2001,
+            "speed": 75,
+            "defense": 600,
+            "lastUpdated": 1622619945.858,
+            "upgradeState": [
+                0,
+                3,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 14400,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                true,
+                false,
+                false,
+                true
+            ],
+            "location": {
+                "coords": {
+                    "x": 188955,
+                    "y": -81642
+                },
+                "hash": "000001be00b53ea1ff2806ead501fdfb738172cfbce1522dee8cefed14edfcdf",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        1127.4808202359807
+    ],
+    [
+        {
+            "locationId": "00001fd9000ad446e6a8dda6a72172d1a3600512e5ac002f6f56654e8459317e",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 43200,
+            "energyGrowth": 3.597,
+            "silverCap": 12000,
+            "silverGrowth": 0,
+            "energy": 43199.86215855237,
+            "silver": 11916,
+            "range": 2001,
+            "speed": 75,
+            "defense": 300,
+            "lastUpdated": 1622619945.765,
+            "upgradeState": [
+                0,
+                3,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 14400,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 188222,
+                    "y": -81255
+                },
+                "hash": "00001fd9000ad446e6a8dda6a72172d1a3600512e5ac002f6f56654e8459317e",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        1526.7668453303536
+    ],
+    [
+        {
+            "locationId": "000034e20010a0eaad4686fe3c2312c7fbe762a699dd9453cbe5d09bc6866c27",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 36000,
+            "energyGrowth": 2.998,
+            "silverCap": 12000,
+            "silverGrowth": 0,
+            "energy": 35999.82026197112,
+            "silver": 4333,
+            "range": 1601,
+            "speed": 75,
+            "defense": 300,
+            "lastUpdated": 1622619938.981,
+            "upgradeState": [
+                0,
+                2,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 7200,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 186949,
+                    "y": -82780
+                },
+                "hash": "000034e20010a0eaad4686fe3c2312c7fbe762a699dd9453cbe5d09bc6866c27",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        1689.9281049796173
+    ],
+    [
+        {
+            "locationId": "0000444900494744336931849595366a8ce5feeea813e720e5b22e1ce5663506",
+            "perlin": 13,
+            "spaceType": 0,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 43200,
+            "energyGrowth": 3.597,
+            "silverCap": 12000,
+            "silverGrowth": 0,
+            "energy": 43200,
+            "silver": 12000,
+            "range": 2001,
+            "speed": 75,
+            "defense": 300,
+            "lastUpdated": 1622619945.673,
+            "upgradeState": [
+                0,
+                3,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 14400,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 190531,
+                    "y": -80688
+                },
+                "hash": "0000444900494744336931849595366a8ce5feeea813e720e5b22e1ce5663506",
+                "perlin": 13,
+                "biomebase": 18
+            },
+            "biome": 3
+        },
+        2780.0620496672373
+    ],
+    [
+        {
+            "locationId": "00009afa00d93eb979edf8a36ca2ea78d59d2b70c14bbca05841cdb61c1d9ee6",
+            "perlin": 14,
+            "spaceType": 1,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 64800,
+            "energyGrowth": 5.395,
+            "silverCap": 15000,
+            "silverGrowth": 0,
+            "energy": 33663.79459720102,
+            "silver": 15000,
+            "range": 3126,
+            "speed": 93,
+            "defense": 150,
+            "lastUpdated": 1622620019.183,
+            "upgradeState": [
+                0,
+                4,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 30000,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 190777,
+                    "y": -78192
+                },
+                "hash": "00009afa00d93eb979edf8a36ca2ea78d59d2b70c14bbca05841cdb61c1d9ee6",
+                "perlin": 14,
+                "biomebase": 18
+            },
+            "biome": 6
+        },
+        5011.421455036485
+    ],
+    [
+        {
+            "locationId": "0000930a00d9ea18cd4d5f84a046aa03d564f57f3bce2f95662121f01f25faae",
+            "perlin": 15,
+            "spaceType": 2,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 93312,
+            "energyGrowth": 7.77,
+            "silverCap": 18000,
+            "silverGrowth": 0,
+            "energy": 67992.4544983494,
+            "silver": 18000,
+            "range": 3751,
+            "speed": 196,
+            "defense": 75,
+            "lastUpdated": 1622619938.98,
+            "upgradeState": [
+                0,
+                4,
+                1
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 54000,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 189012,
+                    "y": -77378
+                },
+                "hash": "0000930a00d9ea18cd4d5f84a046aa03d564f57f3bce2f95662121f01f25faae",
+                "perlin": 15,
+                "biomebase": 18
+            },
+            "biome": 9
+        },
+        5359.0663365925975
+    ],
+    [
+        {
+            "locationId": "00002d2e00dbd155d9f5d45a22cc6c80a660f207daef9a6ca5c7de598742903f",
+            "perlin": 15,
+            "spaceType": 2,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 77760,
+            "energyGrowth": 6.475,
+            "silverCap": 18000,
+            "silverGrowth": 0,
+            "energy": 72474.67205038259,
+            "silver": 3600,
+            "range": 3751,
+            "speed": 112,
+            "defense": 75,
+            "lastUpdated": 1622619938.981,
+            "upgradeState": [
+                0,
+                4,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 36000,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 185218,
+                    "y": -77827
+                },
+                "hash": "00002d2e00dbd155d9f5d45a22cc6c80a660f207daef9a6ca5c7de598742903f",
+                "perlin": 15,
+                "biomebase": 18
+            },
+            "biome": 9
+        },
+        5973.023438761981
+    ],
+    [
+        {
+            "locationId": "0000235100d32901966dad0867670ecbc77fe37126ab92bfb75100c48587a616",
+            "perlin": 15,
+            "spaceType": 2,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 0,
+            "isHomePlanet": false,
+            "energyCap": 77760,
+            "energyGrowth": 6.475,
+            "silverCap": 18000,
+            "silverGrowth": 0,
+            "energy": 74618.89924789684,
+            "silver": 9465,
+            "range": 7503,
+            "speed": 112,
+            "defense": 75,
+            "lastUpdated": 1622619938.981,
+            "upgradeState": [
+                0,
+                4,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 36000,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                true,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 184880,
+                    "y": -77132
+                },
+                "hash": "0000235100d32901966dad0867670ecbc77fe37126ab92bfb75100c48587a616",
+                "perlin": 15,
+                "biomebase": 19
+            },
+            "biome": 9
+        },
+        6737.434823432432
+    ],
+    [
+        {
+            "locationId": "00004e1100ccb30411b580e9e520bb497a971d28e0fb674f321497e29c5b3c11",
+            "perlin": 15,
+            "spaceType": 2,
+            "owner": "0x9210fad7c7ba3d0ffdd977bcc29fb84b2579928a",
+            "hatLevel": 0,
+            "planetLevel": 4,
+            "planetType": 3,
+            "isHomePlanet": false,
+            "energyCap": 37500,
+            "energyGrowth": 3.124,
+            "silverCap": 36000,
+            "silverGrowth": 0,
+            "energy": 37499.95414259309,
+            "silver": 0,
+            "range": 1537,
+            "speed": 112,
+            "defense": 37,
+            "lastUpdated": 1622620019.031,
+            "upgradeState": [
+                0,
+                0,
+                0
+            ],
+            "unconfirmedDepartures": [],
+            "unconfirmedUpgrades": [],
+            "unconfirmedBuyHats": [],
+            "unconfirmedPlanetTransfers": [],
+            "silverSpent": 0,
+            "coordsRevealed": false,
+            "isInContract": true,
+            "syncedWithContract": true,
+            "hasTriedFindingArtifact": false,
+            "destroyed": false,
+            "heldArtifactIds": [],
+            "bonus": [
+                false,
+                false,
+                false,
+                false,
+                false
+            ],
+            "location": {
+                "coords": {
+                    "x": 191976,
+                    "y": -75945
+                },
+                "hash": "00004e1100ccb30411b580e9e520bb497a971d28e0fb674f321497e29c5b3c11",
+                "perlin": 15,
+                "biomebase": 18
+            },
+            "biome": 9
+        },
+        7556.261310992361
+    ]
+]
