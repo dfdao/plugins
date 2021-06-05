@@ -1,12 +1,14 @@
 /**
- * Remember, you have access these globals:
- * 1. df - Just like the df object in your console.
- * 2. ui - For interacting with the game's user interface.
- * 3. plugin - To register the plugin, plus other helpful things.
- *
- * Let's log these to the console when you run your plugin!
+ * Plugin:  
+ * Description: 
+ * 
+ * 
+ * Features:
+ * 
+
+ 
+ * Todo:
  */
-console.log(df, ui, plugin);
 
 class Plugin {
   constructor() { }
@@ -25,4 +27,4 @@ class Plugin {
 /**
  * And don't forget to register it!
  */
-plugin.register(new Plugin());
+export default Plugin;
