@@ -1,8 +1,8 @@
 # dfDao note:
 To get the lastest changes from `darkforest-eth/plugins`, run 
 ```
-cd private-repo
-git remote add public https://github.com/exampleuser/public-repo.git
+cd plugins
+git remote add public https://github.com/darkforest-eth/plugins.git
 git pull public master # Creates a merge commit
 git push origin master
 
