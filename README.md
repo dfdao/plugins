@@ -1,3 +1,13 @@
+# dfDao note:
+To get the lastest changes from `darkforest-eth/plugins`, run 
+```
+cd private-repo
+git remote add public https://github.com/exampleuser/public-repo.git
+git pull public master # Creates a merge commit
+git push origin master
+
+```
+
 # Dark Forest Plugins
 
 In v0.5 of [Dark Forest](https://zkga.me/), we added the ability to customize the game through "Plugins". These are scripts that are run by the game and provided access to specific aspects of the game.
