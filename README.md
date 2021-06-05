@@ -1,12 +1,12 @@
-# dfDao note:
-To get the lastest changes from `darkforest-eth/plugins`, run 
+# dfDao notes:
+1. To get the lastest changes from `darkforest-eth/plugins`, run 
 ```
 cd plugins
 git remote add public https://github.com/darkforest-eth/plugins.git
 git pull public master # Creates a merge commit
 git push origin master
-
 ```
+2. To make a new plugin: `cp -r archetypes/default content/plugin-type/plugin-name`
 
 # Dark Forest Plugins
 
