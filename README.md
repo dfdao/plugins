@@ -9,7 +9,9 @@ git push origin master
 2. To make a new plugin: `cp -r archetypes/default content/plugin-type/plugin-name`
 
 3. For writing plugins in Typescript: after saving your `plugin.ts` file, run:
-```tsc plugin.ts --target es2019 && cat plugin.js | pbcopy``` 
+```
+tsc plugin.ts --target es2019 && cat plugin.js | pbcopy
+``` 
 to copy compiled js to clipboard for pasting in client
 
 
