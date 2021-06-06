@@ -1,0 +1,204 @@
+/**
+ * Plugin:  
+ * Description: 
+ * 
+ * 
+ * Features:
+ * 
+
+ 
+ * Todo:
+ */
+
+type getValueLabel = (a: any) => string;
+type uiElement = 'dropdown' | 'stepper';
+
+type StepObj = {
+    name: string;
+    innerText: string;
+    min: string;
+    max: string;
+    step: string;
+    getValueLabel: getValueLabel;
+    uiType: uiElement;
+  }
+type DropObj = {
+    name: string;
+    innerText: string;
+    size: number;
+    getValueLabel: getValueLabel;
+    uiType: uiElement;
+  }
+
+
+type pluginProperty = {name: string; value: any}
+
+// Returns an array: [stepperLabel, stepper, stepperValue]
+// Need to pass class instance in order to update variables.
+// Append to the DOM in given order.
+const buildStepper = (stepObj: StepObj, classObj): Element[] => {
+  const name = stepObj.name;
+  const getValueLabel = stepObj.getValueLabel;
+
+  let stepperLabel = document.createElement('label');
+  stepperLabel.innerText = stepObj.innerText;
+  stepperLabel.style.display = 'block';
+
+  let stepper = document.createElement('input');
+  stepper.type = 'range';
+  stepper.min = stepObj.min;
+  stepper.max = stepObj.max;
+  stepper.step = stepObj.step;
+  stepper.value = classObj[name]['value'];
+  stepper.style.width = '80%';
+  stepper.style.height = '24px';
+
+  let stepperValue = document.createElement('span');
+  stepperValue.innerText = `${getValueLabel(stepper.value)}`;
+  stepperValue.style.float = 'right';
+
+  stepper.onchange = (evt: any) => {
+    stepperValue.innerText = `${getValueLabel(evt.target.value)}`;
+    try {
+      // update of class Object
+      classObj[name]['value'] = parseInt(evt.target.value, 10); // assuming values are integers
+    } catch (e) {
+      console.error(`could not parse ${name}`, e);
+    }
+  }
+
+  return [stepperLabel, stepper, stepperValue];
+}
+
+// Returns an array: [levelLabel, level]
+// Need to pass class instance in order to update variables.
+// Append to the DOM in given order.
+const buildDropdown = (dropObj: DropObj, classObj): Element[] => {
+  const getValueLabel = dropObj.getValueLabel;
+  const name = dropObj['name']
+
+  let levelLabel = document.createElement('label');
+  levelLabel.innerText = dropObj.innerText;
+  levelLabel.style.display = 'block';
+
+  let level = document.createElement('select');
+  level.style.background = 'rgb(8,8,8)';
+  level.style.width = '100%';
+  level.style.marginTop = '10px';
+  level.style.marginBottom = '10px';
+  Array.from(Array(dropObj.size).keys()).forEach(lvl => {
+    let opt = document.createElement('option');
+    opt.value = `${lvl}`;
+    opt.innerText = `${getValueLabel(lvl)}`;
+    level.appendChild(opt);
+  });
+  level.value = `${classObj[name]['value']}`;
+
+  level.onchange = (evt: any) => {
+    try {
+      classObj[name]['value'] = parseInt(evt.target.value, 10);
+    } catch (e) {
+      console.error(`could not parse ${name}`, e);
+    }
+  }
+
+  return [levelLabel, level]
+
+}
+
+// appends elements to the DOM from list.
+const appendListToDom = (container: any, eltList: Element[]): void => {
+  try {
+    for (const [index, elt] of eltList.entries()) {
+      container.appendChild(elt);
+    }
+  }
+  catch (e) {
+    console.log('append to DOM error', e)
+  }
+}
+
+const buildUi = (container: any, objList: any[], classObj: any) => {
+  let elements = [];
+
+  for (const obj of objList) {
+    switch(obj.uiType) {
+      case 'dropdown':
+        elements.push(buildDropdown(obj, classObj))
+        break;
+      case 'stepper':
+        elements.push(buildStepper(obj, classObj));
+        break;
+      default:
+        break;
+    } 
+  }
+
+  appendListToDom(container, elements.flat());
+
+}
+
+class Plugin {
+  minSilver: pluginProperty
+  minPlanetLevel: pluginProperty
+
+  constructor() {
+    this.minSilver = {name: 'minSilver', value: 20000}; 
+    this.minPlanetLevel = {name: 'minPlanetLevel', value: 3}; 
+  }
+
+  /**
+   * Called when plugin is launched with the "run" button.
+   */
+  async render(container) {
+    let inputs = [];
+
+    // Create a stepper
+    const minSilver: StepObj = {
+      name: this.minSilver.name,
+      innerText: 'Test stepper',
+      min: '0',
+      max: '100000',
+      step: '10000',
+      getValueLabel: (value: number) => { return `${value/1000}k` },
+      uiType: 'stepper'
+    };
+
+    const minPlanetLevel: DropObj = {
+      name: this.minPlanetLevel.name,
+      innerText: 'Test dropdown',
+      size: 10,
+      getValueLabel: (value: number) => { return `Level ${value}` },
+      uiType: 'dropdown'
+    };
+
+    inputs.push(minSilver);
+    inputs.push(minPlanetLevel);
+      
+
+    buildUi(container, inputs, this);
+
+    let pilotButton = document.createElement('button');
+    pilotButton.innerHTML = `${'console log value'}`;
+
+    pilotButton.onclick = () => {
+      console.log('minPlanetLevel is ', this.minPlanetLevel)
+      console.log('minSilveLevel is ', this.minSilver)
+    }
+
+    container.appendChild(pilotButton);
+ 
+  }
+
+  /**
+   * Called when plugin modal is closed.
+   */
+  destroy() { }
+}
+
+/**
+ * And don't forget to register it!
+ */
+export default Plugin;
+
+
