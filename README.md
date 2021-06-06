@@ -8,6 +8,10 @@ git push origin master
 ```
 2. To make a new plugin: `cp -r archetypes/default content/plugin-type/plugin-name`
 
+3. For writing plugins in Typescript: after saving your `plugin.ts` file, run:
+`tsc plugin.ts --target es2019 && cat plugin.js | pbcopy` to copy compiled js to clipboard for pasting in client
+
+
 # Dark Forest Plugins
 
 In v0.5 of [Dark Forest](https://zkga.me/), we added the ability to customize the game through "Plugins". These are scripts that are run by the game and provided access to specific aspects of the game.
