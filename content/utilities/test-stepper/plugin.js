@@ -10,6 +10,8 @@
  * Todo:
  */
 import { buildUi } from 'https://dfdao.github.io/utils/ui.js';
+import { uiElts } from 'https://dfdao.github.io/utils/utils.js';
+console.log('uiElts', uiElts );
 class Plugin {
     constructor() {
         this.minSilver = { name: 'minSilver', value: 20000 };
