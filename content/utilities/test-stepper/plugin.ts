@@ -16,6 +16,12 @@ import {
 } from 'https://dfdao.github.io/utils/ui.js';
 
 import {
+  uiTest
+} from 'https://dfdao.github.io/utils/utils.js';
+
+console.log('uiTest', uiTest)
+
+import {
   PluginProperty,
   DropObj,
   StepObj
