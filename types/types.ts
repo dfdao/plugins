@@ -1,6 +1,6 @@
 /**
  * ui types
- */ 
+ */
 
 export type GetValueLabel = (a: any) => string;
 
@@ -24,4 +24,3 @@ export type DropObj = {
   }
 
 export type PluginProperty = {name: string; value: any}
-
