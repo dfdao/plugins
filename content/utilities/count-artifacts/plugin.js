@@ -1,7 +1,7 @@
 /**
  * Plugin:  
  * Description: 
- * 
+ *  Not working right now
  * 
  * Features:
  * 
@@ -12,57 +12,13 @@
 
 import {
   canHaveArtifact,
-  //hasArtifact,
-  //countPlanetArtifactRarity,
+  hasArtifact,
+  countPlanetArtifactRarity,
 } from 'https://dfdao.github.io/utils/artifacts.js';
 
-//import { ArtifactRarity } from 'https://dfdao.github.io/utils/enums.js';
-let countPlanetArtifactRarity = (planet, artifactRarity) => {
-  let count = 0;
-  const heldArtifactIds = planet.heldArtifactIds;
-  if (heldArtifactIds) {
-    for (let id of heldArtifactIds) {
-      const artifact = df.entityStore.getArtifactById(id)
-      artifact.rarity == artifactRarity ? count +=1 : null
-    }
-  }
-  return count;
-}
+import * as ENUMS from 'https://dfdao.github.io/utils/enums.js';
 
-let ArtifactRarity = {
-        "0": "Unknown",
-        "1": "MIN",
-        "2": "Rare",
-        "3": "Epic",
-        "4": "Legendary",
-        "5": "MAX",
-        "Unknown": 0,
-        "Common": 1,
-        "Rare": 2,
-        "Epic": 3,
-        "Legendary": 4,
-        "Mythic": 5,
-        "MIN": 1,
-        "MAX": 5
-};
-
-let hasArtifact = (planet) => { return planet.heldArtifactIds.length != 0 };
-
-
-console.log('imports', countPlanetArtifactRarity)
-
-const countArtifacts = (artifactRarity) => {
-  let count = 0
-    df.getMyPlanets()
-      .filter(hasArtifact)
-      // map artifact ids -> level of artifact
-      .map(p => {
-        //console.log('p', p)
-        count += countPlanetArtifactRarity(p, artifactRarity)
-      });
-  return count;
-}
-
+console.log('enums', ENUMS)
 
 class Plugin {
   constructor() { }
@@ -79,8 +35,11 @@ class Plugin {
 
     pilotButton.onclick = () => {
 
-      const count = countArtifacts(ArtifactRarity.Epic)
-      pilotButton.innerHTML = `found ${count} ${ArtifactRarity[ArtifactRarity.Epic]} artifacts`;
+      const epic = ArtifactRarity.Epic
+      const mythic = ArtifactRarity.Mythic
+      const legendary = ArtifactRarity.Legendary
+      const count = countArtifacts(mythic)
+      pilotButton.innerHTML = `found ${count} ${ArtifactRarity[legendary]} artifacts`;
     }
 
     container.appendChild(pilotButton); 
