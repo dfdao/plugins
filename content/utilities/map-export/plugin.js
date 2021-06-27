@@ -264,4 +264,97 @@ class Plugin {
   }
 }
 
-export default Plugin;
+class RemotePlugin extends Plugin {
+  constructor() {
+    super();
+
+    this.baseUrl = 'http://localhost:8500';
+  }
+
+  requestPath = () => {
+    return this.baseUrl + "/" + df.getContractAddress() + '/chunks';
+  }
+
+  onUpload = async () => {
+    let chunks = ui.getExploredChunks();
+    let chunksAsArray = Array.from(chunks);
+    if (this.beginCoords && this.endCoords) {
+      let begin = {
+        x: Math.min(this.beginCoords.x, this.endCoords.x),
+        y: Math.max(this.beginCoords.y, this.endCoords.y),
+      };
+      let end = {
+        x: Math.max(this.beginCoords.x, this.endCoords.x),
+        y: Math.min(this.beginCoords.y, this.endCoords.y),
+      };
+      chunksAsArray = chunksAsArray.filter(chunk => {
+        return this.intersectsXY(chunk, begin, end);
+      });
+    }
+    try {
+      let map = JSON.stringify(chunksAsArray);
+
+      const resp = await fetch(this.requestPath(), {
+        method: 'POST',
+        body: JSON.stringify({'chunks': chunksAsArray }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      this.status.innerText = 'Map uploaded!';
+      this.status.style.color = 'white'
+    } catch (err) {
+      console.error(err);
+      this.status.innerText = 'Failed to upload map.';
+      this.status.style.color = 'red';
+    }
+  }
+
+  onDownload = async () => {
+    const resp = await fetch(this.requestPath(), {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json' }
+    });
+    this.status.innerText = 'Downloaded map!';
+    this.status.style.color = 'white';
+
+    let chunks = await resp.json();
+
+    this.status.innerText += '\nImporting, this will take awhile...';
+
+    try {
+      await df.bulkAddNewChunks(chunks)
+      this.status.innerText = 'Successfully imported map!';
+    } catch (err) {
+      console.log(err);
+      this.status.innerText = 'Encountered an unexpected error.';
+      this.status.style.color = 'red';
+    }
+  }
+
+  render(container) {
+    super.render(container);
+
+    let remoteWrapper = document.createElement('div');
+    remoteWrapper.style.display = 'flex';
+    remoteWrapper.style.justifyContent = 'space-between';
+    remoteWrapper.style.marginBottom = '10px';
+
+    let uploadButton = document.createElement('button');
+    uploadButton.innerText = "Upload Map";
+    uploadButton.onclick = this.onUpload;
+
+    let downloadButton = document.createElement('button');
+    downloadButton.innerText = "Download Map";
+    downloadButton.onclick = this.onDownload;
+
+    remoteWrapper.appendChild(uploadButton);
+    remoteWrapper.appendChild(downloadButton);
+
+    container.appendChild(remoteWrapper);
+  }
+
+  destroy() {
+    super.destroy();
+  }
+}
+
+export default RemotePlugin;
