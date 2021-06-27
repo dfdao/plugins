@@ -105,3 +105,6 @@ dist
 
 # Garbage
 .DS_Store
+
+# Project files
+.idea/
