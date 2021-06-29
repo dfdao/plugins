@@ -119,7 +119,7 @@ class RemotePlugin extends Plugin {
     super();
 
     this.timers = [];
-    this.crawlTimerDuration = 1 * 60 * 1000; // ms
+    this.crawlTimerDuration = 1 * 60 * 1000; // in ms
   }
 
   render(container) {
@@ -164,14 +164,15 @@ class RemotePlugin extends Plugin {
 
     console.log("setting up a crawl everything loop");
     this.timers.push(
-        setInterval(
-            function () {
-              this.crawlEverything();
-            }, this.crawlTimerDuration),
+        setInterval(this.crawlEverything.bind(this), this.crawlTimerDuration)
     );
   }
 
   destroy() {
+    for(let timer of this.timers) {
+      clearInterval(timer);
+    }
+
     super.destroy();
   }
 }
