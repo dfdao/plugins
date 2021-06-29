@@ -62,6 +62,7 @@ class Plugin {
     }
 
     let message = document.createElement('div');
+    this.message = message;
 
     let button = document.createElement('button');
     button.style.width = '100%';
@@ -72,9 +73,9 @@ class Plugin {
       if (planet) {
         message.innerText = 'Please wait...';
         let moves = capturePlanets(
-          planet.locationId,
-          this.minPlanetLevel,
-          this.maxEnergyPercent,
+            planet.locationId,
+            this.minPlanetLevel,
+            this.maxEnergyPercent,
         );
         message.innerText = `Crawling ${moves} planets.`;
       } else {
@@ -93,9 +94,9 @@ class Plugin {
       for (let planet of df.getMyPlanets()) {
         setTimeout(() => {
           moves += capturePlanets(
-            planet.locationId,
-            this.minPlanetLevel,
-            this.maxEnergyPercent,
+              planet.locationId,
+              this.minPlanetLevel,
+              this.maxEnergyPercent,
           );
           message.innerText = `Crawling ${moves} planets.`;
         }, 0);
@@ -113,7 +114,70 @@ class Plugin {
   }
 }
 
-export default Plugin;
+class RemotePlugin extends Plugin {
+  constructor() {
+    super();
+
+    this.timers = [];
+    this.crawlTimerDuration = 1 * 60 * 1000; // in ms
+  }
+
+  render(container) {
+    super.render(container);
+
+    let remoteWrapper = document.createElement('div');
+    remoteWrapper.style.display = 'flex';
+    remoteWrapper.style.justifyContent = 'space-between';
+    remoteWrapper.style.marginBottom = '10px';
+
+    let everythingLoopButton = document.createElement('button');
+    everythingLoopButton.style.width = '100%';
+    everythingLoopButton.style.marginBottom = '10px';
+    everythingLoopButton.innerHTML = 'Crawl everything in a loop!'
+    everythingLoopButton.onclick = () => {
+      this.loopCrawlEverything();
+    }
+
+    remoteWrapper.appendChild(everythingLoopButton);
+
+    container.appendChild(remoteWrapper);
+  }
+
+  crawlEverything() {
+    this.message.innerText = 'Please wait...';
+    console.log("crawling everything from a loop");
+    let moves = 0;
+    for (let planet of df.getMyPlanets()) {
+      setTimeout(() => {
+        moves += capturePlanets(
+            planet.locationId,
+            this.minPlanetLevel,
+            this.maxEnergyPercent,
+        );
+        this.message.innerText = `Crawling ${moves} planets.`;
+      }, 0);
+    }
+  }
+
+  loopCrawlEverything() {
+    this.crawlEverything();
+
+    console.log("setting up a crawl everything loop");
+    this.timers.push(
+        setInterval(this.crawlEverything.bind(this), this.crawlTimerDuration)
+    );
+  }
+
+  destroy() {
+    for(let timer of this.timers) {
+      clearInterval(timer);
+    }
+
+    super.destroy();
+  }
+}
+
+export default RemotePlugin;
 
 
 function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent) {
@@ -127,15 +191,15 @@ function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent) {
   }
 
   const candidates_ = df.getPlanetsInRange(fromId, maxDistributeEnergyPercent)
-    .filter(p => (
-      p.owner !== df.account &&
-      p.owner === "0x0000000000000000000000000000000000000000" &&
-      p.planetLevel >= minCaptureLevel
-    ))
-    .map(to => {
-      return [to, distance(from, to)]
-    })
-    .sort((a, b) => a[1] - b[1]);
+      .filter(p => (
+          p.owner !== df.account &&
+          p.owner === "0x0000000000000000000000000000000000000000" &&
+          p.planetLevel >= minCaptureLevel
+      ))
+      .map(to => {
+        return [to, distance(from, to)]
+      })
+      .sort((a, b) => a[1] - b[1]);
 
   let i = 0;
   const energyBudget = Math.floor((maxDistributeEnergyPercent / 100) * planet.energy);
