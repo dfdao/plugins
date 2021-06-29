@@ -275,7 +275,7 @@ class RemotePlugin extends Plugin {
     return this.baseUrl + "/" + df.getContractAddress() + '/chunks';
   }
 
-  onUpload = async () => {
+  onUploadToServer = async () => {
     let chunks = ui.getExploredChunks();
     let chunksAsArray = Array.from(chunks);
     if (this.beginCoords && this.endCoords) {
@@ -308,7 +308,7 @@ class RemotePlugin extends Plugin {
     }
   }
 
-  onDownload = async () => {
+  onDownloadToServer = async () => {
     const resp = await fetch(this.requestPath(), {
       method: 'GET',
       headers: {'Content-Type': 'application/json' }
@@ -340,11 +340,11 @@ class RemotePlugin extends Plugin {
 
     let uploadButton = document.createElement('button');
     uploadButton.innerText = "Upload Map";
-    uploadButton.onclick = this.onUpload;
+    uploadButton.onclick = this.onUploadToServer;
 
     let downloadButton = document.createElement('button');
     downloadButton.innerText = "Download Map";
-    downloadButton.onclick = this.onDownload;
+    downloadButton.onclick = this.onDownloadToServer;
 
     remoteWrapper.appendChild(uploadButton);
     remoteWrapper.appendChild(downloadButton);
