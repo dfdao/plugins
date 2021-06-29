@@ -47,7 +47,7 @@ class Plugin {
       } catch (e) {
         console.error('could not parse energy percent', e);
       }
-    }
+    };
 
     let levelLabel = document.createElement('label');
     levelLabel.innerText = 'Min. level to capture';
@@ -72,7 +72,7 @@ class Plugin {
       } catch (e) {
         console.error('could not parse planet level', e);
       }
-    }
+    };
 
     let planetTypeLabel = document.createElement('label');
     planetTypeLabel.innerText = 'Planet type to capture';
@@ -105,7 +105,7 @@ class Plugin {
     let button = document.createElement('button');
     button.style.width = '100%';
     button.style.marginBottom = '10px';
-    button.innerHTML = 'Crawl from selected!'
+    button.innerHTML = 'Crawl from selected!';
     button.onclick = () => {
       let planet = ui.getSelectedPlanet();
       if (planet) {
@@ -120,12 +120,12 @@ class Plugin {
       } else {
         message.innerText = 'No planet selected.';
       }
-    }
+    };
 
     let globalButton = document.createElement('button');
     globalButton.style.width = '100%';
     globalButton.style.marginBottom = '10px';
-    globalButton.innerHTML = 'Crawl everything!'
+    globalButton.innerHTML = 'Crawl everything!';
     globalButton.onclick = () => {
       message.innerText = 'Please wait...';
 
@@ -141,7 +141,7 @@ class Plugin {
           message.innerText = `Crawling ${moves} ${typeNames[this.planetType]}s.`;
         }, 0);
       }
-    }
+    };
 
     container.appendChild(stepperLabel);
     container.appendChild(stepper);
@@ -175,10 +175,10 @@ class RemotePlugin extends Plugin {
     let everythingLoopButton = document.createElement('button');
     everythingLoopButton.style.width = '100%';
     everythingLoopButton.style.marginBottom = '10px';
-    everythingLoopButton.innerHTML = 'Crawl everything in a loop!'
+    everythingLoopButton.innerHTML = 'Crawl everything in a loop!';
     everythingLoopButton.onclick = () => {
       this.loopCrawlEverything();
-    }
+    };
 
     remoteWrapper.appendChild(everythingLoopButton);
 
@@ -227,7 +227,7 @@ function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, pla
   const from = df.getPlanetWithId(fromId);
 
   // Rejected if has pending outbound moves
-  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId)
+  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
   if (unconfirmed.length !== 0) {
     return;
   }
@@ -257,7 +257,7 @@ function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, pla
     const candidate = candidates_[i++][0];
 
     // Rejected if has unconfirmed pending arrivals
-    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId)
+    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId);
     if (unconfirmed.length !== 0) {
       continue;
     }
