@@ -100,6 +100,7 @@ class Plugin {
     }
 
     let message = document.createElement('div');
+    this.message = message;
 
     let button = document.createElement('button');
     button.style.width = '100%';
@@ -155,7 +156,69 @@ class Plugin {
   }
 }
 
-export default Plugin;
+class RemotePlugin extends Plugin {
+  constructor() {
+    super();
+
+    this.timers = [];
+    this.crawlTimerDuration = 1 * 60 * 1000; // ms
+  }
+
+  render(container) {
+    super.render(container);
+
+    let remoteWrapper = document.createElement('div');
+    remoteWrapper.style.display = 'flex';
+    remoteWrapper.style.justifyContent = 'space-between';
+    remoteWrapper.style.marginBottom = '10px';
+
+    let everythingLoopButton = document.createElement('button');
+    everythingLoopButton.style.width = '100%';
+    everythingLoopButton.style.marginBottom = '10px';
+    everythingLoopButton.innerHTML = 'Crawl everything in a loop!'
+    everythingLoopButton.onclick = () => {
+      this.loopCrawlEverything();
+    }
+
+    remoteWrapper.appendChild(everythingLoopButton);
+
+    container.appendChild(remoteWrapper);
+  }
+
+  crawlEverything() {
+    this.message.innerText = 'Please wait...';
+    console.log("crawling everything from a loop");
+    let moves = 0;
+    for (let planet of df.getMyPlanets()) {
+      setTimeout(() => {
+        moves += capturePlanets(
+            planet.locationId,
+            this.minPlanetLevel,
+            this.maxEnergyPercent,
+        );
+        this.message.innerText = `Crawling ${moves} planets.`;
+      }, 0);
+    }
+  }
+
+  loopCrawlEverything() {
+    this.crawlEverything();
+
+    console.log("setting up a crawl everything loop");
+    this.timers.push(
+        setInterval(
+            function () {
+              this.crawlEverything();
+            }, this.crawlTimerDuration),
+    );
+  }
+
+  destroy() {
+    super.destroy();
+  }
+}
+
+export default RemotePlugin;
 
 
 function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, planetType) {
