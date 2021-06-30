@@ -2,7 +2,7 @@ import {
   move
 } from 'https://plugins.zkga.me/utils/queued-move.js';
 // TODO: do we want queued move? Or some parallel stuff
-import { buildUi } from 'https://dfdao.github.io/utils/ui.js'
+import { buildUi } from 'https://dfdao.github.io/utils/ui.js';
 //import { getMaxEnergyPct } from 'https://dfdao.github.io/utils/planets.js'
 
 class Plugin {
@@ -53,18 +53,18 @@ class Plugin {
     let button = document.createElement('button');
     button.style.width = '100%';
     button.style.marginBottom = '10px';
-    button.innerHTML = 'Crawl from selected!'
+    button.innerHTML = 'Crawl from selected!';
     button.onclick = () => {
-      console.log('inputs:\n')
-      console.log(this.minEnergyRemainingPct)
-      console.log(this.minPlanetLevel)
-      console.log(this.crawlDirection)
-    }
+      console.log('inputs:\n');
+      console.log(this.minEnergyRemainingPct);
+      console.log(this.minPlanetLevel);
+      console.log(this.crawlDirection);
+    };
 
     let globalButton = document.createElement('button');
     globalButton.style.width = '100%';
     globalButton.style.marginBottom = '10px';
-    globalButton.innerHTML = 'Crawl everything!'
+    globalButton.innerHTML = 'Crawl everything!';
     globalButton.onclick = () => {
       message.innerText = 'Please wait...';
 
@@ -79,7 +79,7 @@ class Plugin {
           message.innerText = `Crawling ${moves} planets.`;
         }, 0);
       }
-    }
+    };
 
     container.appendChild(button);
     container.appendChild(globalButton);
@@ -94,10 +94,10 @@ function capturePlanets(fromId, minCaptureLevel, minEnergyRemainingPct) {
 
   const planet = df.getPlanetWithId(fromId);
   const from = df.getPlanetWithId(fromId);
-  const maxDistributeEnergyPercent = getMaxEnergyPct(from, minEnergyRemainingPct)
+  const maxDistributeEnergyPercent = getMaxEnergyPct(from, minEnergyRemainingPct);
 
   // Rejected if has pending outbound moves
-  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId)
+  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
   if (unconfirmed.length !== 0) {
     return;
   }
@@ -109,7 +109,7 @@ function capturePlanets(fromId, minCaptureLevel, minEnergyRemainingPct) {
       p.planetLevel >= minCaptureLevel
     ))
     .map(to => {
-      return [to, distance(from, to)]
+      return [to, distance(from, to)];
     })
     .sort((a, b) => a[1] - b[1]);
 
@@ -126,7 +126,7 @@ function capturePlanets(fromId, minCaptureLevel, minEnergyRemainingPct) {
     const candidate = candidates_[i++][0];
 
     // Rejected if has unconfirmed pending arrivals
-    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId)
+    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId);
     if (unconfirmed.length !== 0) {
       continue;
     }

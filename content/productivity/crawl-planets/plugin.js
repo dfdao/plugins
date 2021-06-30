@@ -1,295 +1,302 @@
-const planetTypes = {
-  'Planet': 0,
-  'Asteroid': 1,
-  'Foundry': 2,
-  'Spacetime Rip': 3,
-  'Quasar': 4,
+// import {
+//   move
+// } from 'https://plugins.zkga.me/utils/queued-move.js';
+
+/**
+ Tony 6/30 changes:
+ - max move limit of 50 (need to log when each move has gone through)
+ - won't crawl for quasars
+ - won't use planets > level 4 for crawling
+ - won't use asteroids for crawling
+ */
+
+import { buildUi } from 'https://dfdao.github.io/utils/ui.js';
+const PlanetType = {
+    "PLANET": 0,
+    "ASTEROID": 1,
+    "FOUNDRY": 2,
+    "RIP": 3,
+    "QUASAR": 4
 };
 
-const planetLevels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-const players = [
-  "0x0000000000000000000000000000000000000000",
-];
-
-const typeNames = Object.keys(planetTypes);
+const MOVE_LIMIT = 50;
 
 class Plugin {
-  constructor() {
-    this.planetType = 1;
-    this.minPlanetLevel = 3;
-    this.maxEnergyPercent = 85;
-  }
-  render(container) {
-    container.style.width = '200px';
-
-    let stepperLabel = document.createElement('label');
-    stepperLabel.innerText = 'Max % energy to spend';
-    stepperLabel.style.display = 'block';
-
-    let stepper = document.createElement('input');
-    stepper.type = 'range';
-    stepper.min = '0';
-    stepper.max = '100';
-    stepper.step = '5';
-    stepper.value = `${this.maxEnergyPercent}`;
-    stepper.style.width = '80%';
-    stepper.style.height = '24px';
-
-    let percent = document.createElement('span');
-    percent.innerText = `${stepper.value}%`;
-    percent.style.float = 'right';
-
-    stepper.onchange = (evt) => {
-      percent.innerText = `${evt.target.value}%`;
-      try {
-        this.maxEnergyPercent = parseInt(evt.target.value, 10);
-      } catch (e) {
-        console.error('could not parse energy percent', e);
-      }
-    };
-
-    let levelLabel = document.createElement('label');
-    levelLabel.innerText = 'Min. level to capture';
-    levelLabel.style.display = 'block';
-
-    let level = document.createElement('select');
-    level.style.background = 'rgb(8,8,8)';
-    level.style.width = '100%';
-    level.style.marginTop = '10px';
-    level.style.marginBottom = '10px';
-    planetLevels.forEach(lvl => {
-      let opt = document.createElement('option');
-      opt.value = `${lvl}`;
-      opt.innerText = `Level ${lvl}`;
-      level.appendChild(opt);
-    });
-    level.value = `${this.minPlanetLevel}`;
-
-    level.onchange = (evt) => {
-      try {
-        this.minPlanetLevel = parseInt(evt.target.value, 10);
-      } catch (e) {
-        console.error('could not parse planet level', e);
-      }
-    };
-
-    let planetTypeLabel = document.createElement('label');
-    planetTypeLabel.innerText = 'Planet type to capture';
-    planetTypeLabel.style.display = 'block';
-
-    let planetType = document.createElement('select');
-    planetType.style.background = 'rgb(8,8,8)';
-    planetType.style.width = '100%';
-    planetType.style.marginTop = '10px';
-    planetType.style.marginBottom = '10px';
-    Object.entries(planetTypes).forEach(([name, key]) => {
-      let opt = document.createElement('option');
-      opt.value = `${key}`;
-      opt.innerText = `${name}`;
-      planetType.appendChild(opt);
-    });
-    planetType.value = `${this.planetType}`;
-
-    planetType.onchange = (evt) => {
-      try {
-        this.planetType = parseInt(evt.target.value, 10);
-      } catch (e) {
-        console.error('could not parse planet planet type', e);
-      }
+    constructor() {
+        this.minPlanetLevel = 3;
+        this.maxEnergyPercent = 85;
+        // This is the max level which will crawl for planets
+        this.maxPlanetLevel = { name: 'maxPlanetLevel', value: 4 };
     }
+    render(container) {
+        container.style.width = '200px';
 
-    let message = document.createElement('div');
-    this.message = message;
+        let stepperLabel = document.createElement('label');
+        stepperLabel.innerText = 'Max % energy to spend';
+        stepperLabel.style.display = 'block';
 
-    let button = document.createElement('button');
-    button.style.width = '100%';
-    button.style.marginBottom = '10px';
-    button.innerHTML = 'Crawl from selected!';
-    button.onclick = () => {
-      let planet = ui.getSelectedPlanet();
-      if (planet) {
-        message.innerText = 'Please wait...';
-        let moves = capturePlanets(
-          planet.locationId,
-          this.minPlanetLevel,
-          this.maxEnergyPercent,
-          this.planetType,
-        );
-        message.innerText = `Crawling ${moves} ${typeNames[this.planetType]}s.`;
-      } else {
-        message.innerText = 'No planet selected.';
-      }
-    };
+        let stepper = document.createElement('input');
+        stepper.type = 'range';
+        stepper.min = '0';
+        stepper.max = '100';
+        stepper.step = '5';
+        stepper.value = `${this.maxEnergyPercent}`;
+        stepper.style.width = '80%';
+        stepper.style.height = '24px';
 
-    let globalButton = document.createElement('button');
-    globalButton.style.width = '100%';
-    globalButton.style.marginBottom = '10px';
-    globalButton.innerHTML = 'Crawl everything!';
-    globalButton.onclick = () => {
-      message.innerText = 'Please wait...';
+        let percent = document.createElement('span');
+        percent.innerText = `${stepper.value}%`;
+        percent.style.float = 'right';
 
-      let moves = 0;
-      for (let planet of df.getMyPlanets()) {
-        setTimeout(() => {
-          moves += capturePlanets(
-            planet.locationId,
-            this.minPlanetLevel,
-            this.maxEnergyPercent,
-            this.planetType,
-          );
-          message.innerText = `Crawling ${moves} ${typeNames[this.planetType]}s.`;
-        }, 0);
-      }
-    };
+        stepper.onchange = (evt) => {
+            percent.innerText = `${evt.target.value}%`;
+            try {
+                this.maxEnergyPercent = parseInt(evt.target.value, 10);
+            } catch (e) {
+                console.error('could not parse energy percent', e);
+            }
+        };
 
-    container.appendChild(stepperLabel);
-    container.appendChild(stepper);
-    container.appendChild(percent);
-    container.appendChild(levelLabel);
-    container.appendChild(level);
-    container.appendChild(planetTypeLabel);
-    container.appendChild(planetType);
-    container.appendChild(button);
-    container.appendChild(globalButton);
-    container.appendChild(message);
-  }
+        let levelLabel = document.createElement('label');
+        levelLabel.innerText = 'Min. planets to capture';
+        levelLabel.style.display = 'block';
+
+        let level = document.createElement('select');
+        level.style.background = 'rgb(8,8,8)';
+        level.style.width = '100%';
+        level.style.marginTop = '10px';
+        level.style.marginBottom = '10px';
+        [0, 1, 2, 3, 4, 5, 6, 7].forEach(lvl => {
+            let opt = document.createElement('option');
+            opt.value = `${lvl}`;
+            opt.innerText = `Level ${lvl}`;
+            level.appendChild(opt);
+        });
+        level.value = `${this.minPlanetLevel}`;
+
+        level.onchange = (evt) => {
+            try {
+                this.minPlanetLevel = parseInt(evt.target.value);
+            } catch (e) {
+                console.error('could not parse planet level', e);
+            }
+        };
+
+        let inputs = [];
+        const maxPlanetLevel = {
+            name: this.maxPlanetLevel.name,
+            innerText: 'Max planet send level',
+            size: 10,
+            getValueLabel: (value) => { return `Level ${value}`; },
+            uiType: 'dropdown'
+        };
+
+        inputs.push(maxPlanetLevel);
+
+        let message = document.createElement('div');
+        this.message = message;
+
+        let button = document.createElement('button');
+        button.style.width = '100%';
+        button.style.marginBottom = '10px';
+        button.innerHTML = 'Crawl from selected!';
+        button.onclick = () => {
+            let planet = ui.getSelectedPlanet();
+            if (planet) {
+                message.innerText = 'Please wait...';
+                let moves = capturePlanets(
+                    planet.locationId,
+                    this.minPlanetLevel,
+                    this.maxEnergyPercent,
+                );
+                message.innerText = `Crawling ${moves} planets.`;
+            } else {
+                message.innerText = 'No planet selected.';
+            }
+        };
+
+        let globalButton = document.createElement('button');
+        globalButton.style.width = '100%';
+        globalButton.style.marginBottom = '10px';
+        globalButton.innerHTML = 'Crawl everything!';
+        globalButton.onclick = () => {
+            message.innerText = 'Please wait...';
+
+            let moves = 0;
+            for (let planet of df.getMyPlanets()) {
+                setTimeout(() => {
+                    moves += capturePlanets(
+                        planet.locationId,
+                        this.minPlanetLevel,
+                        this.maxEnergyPercent,
+                    );
+                    message.innerText = `Crawling ${moves} planets.`;
+                }, 0);
+            }
+        };
+
+        container.appendChild(stepperLabel);
+        container.appendChild(stepper);
+        container.appendChild(percent);
+        container.appendChild(levelLabel);
+        container.appendChild(level);
+        buildUi(container, inputs, this);
+        container.appendChild(button);
+        container.appendChild(globalButton);
+        container.appendChild(message);
+    }
 }
 
 class RemotePlugin extends Plugin {
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    this.timers = [];
-    this.crawlTimerDuration = 1 * 60 * 1000; // in ms
-  }
+        this.timers = [];
+        this.crawlTimerDuration = 1 * 60 * 1000; // in ms
+    }
 
-  render(container) {
-    super.render(container);
+    render(container) {
+        super.render(container);
 
-    let remoteWrapper = document.createElement('div');
-    remoteWrapper.style.display = 'flex';
-    remoteWrapper.style.justifyContent = 'space-between';
-    remoteWrapper.style.marginBottom = '10px';
+        let remoteWrapper = document.createElement('div');
+        remoteWrapper.style.display = 'flex';
+        remoteWrapper.style.justifyContent = 'space-between';
+        remoteWrapper.style.marginBottom = '10px';
 
-    let everythingLoopButton = document.createElement('button');
-    everythingLoopButton.style.width = '100%';
-    everythingLoopButton.style.marginBottom = '10px';
-    everythingLoopButton.innerHTML = 'Crawl everything in a loop!';
-    everythingLoopButton.onclick = () => {
-      this.loopCrawlEverything();
-    };
+        let everythingLoopButton = document.createElement('button');
+        everythingLoopButton.style.width = '100%';
+        everythingLoopButton.style.marginBottom = '10px';
+        everythingLoopButton.innerHTML = 'Crawl everything in a loop!';
+        everythingLoopButton.onclick = () => {
+            this.loopCrawlEverything();
+        };
 
-    remoteWrapper.appendChild(everythingLoopButton);
+        remoteWrapper.appendChild(everythingLoopButton);
 
-    container.appendChild(remoteWrapper);
-  }
+        container.appendChild(remoteWrapper);
+    }
 
-  crawlEverything() {
-    this.message.innerText = 'Please wait...';
-    console.log("crawling everything from a loop");
-    let moves = 0;
-    for (let planet of df.getMyPlanets()) {
-      setTimeout(() => {
-        moves += capturePlanets(
-            planet.locationId,
-            this.minPlanetLevel,
-            this.maxEnergyPercent,
+    crawlEverything() {
+        this.message.innerText = 'Please wait...';
+        console.log("crawling everything from a loop");
+        let moves = 0;
+        for (let planet of df.getMyPlanets()) {
+            setTimeout(() => {
+                if (moves < MOVE_LIMIT) {
+                    // console.log(`max planet level is ${this.maxPlanetLevel.value}`);
+                    moves += capturePlanets(
+                        planet.locationId,
+                        this.minPlanetLevel,
+                        this.maxEnergyPercent,
+                        this.maxPlanetLevel.value,
+                    );
+                    this.message.innerText = `Crawling ${moves} planets.`;
+                }
+            }, 0);
+        }
+    }
+
+    loopCrawlEverything() {
+        this.crawlEverything();
+
+        console.log("setting up a crawl everything loop");
+        this.timers.push(
+            setInterval(this.crawlEverything.bind(this), this.crawlTimerDuration)
         );
-        this.message.innerText = `Crawling ${moves} planets.`;
-      }, 0);
-    }
-  }
-
-  loopCrawlEverything() {
-    this.crawlEverything();
-
-    console.log("setting up a crawl everything loop");
-    this.timers.push(
-        setInterval(this.crawlEverything.bind(this), this.crawlTimerDuration)
-    );
-  }
-
-  destroy() {
-    for(let timer of this.timers) {
-      clearInterval(timer);
     }
 
-    super.destroy();
-  }
+    destroy() {
+        for(let timer of this.timers) {
+            clearInterval(timer);
+        }
+
+        super.destroy();
+    }
 }
 
 export default RemotePlugin;
 
 
-function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, planetType) {
-  const planet = df.getPlanetWithId(fromId);
-  const from = df.getPlanetWithId(fromId);
+function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, maxPlanetLevel) {
+    const planet = df.getPlanetWithId(fromId);
+    const from = df.getPlanetWithId(fromId);
 
-  // Rejected if has pending outbound moves
-  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
-  if (unconfirmed.length !== 0) {
-    return;
-  }
+    // filter to not crawl from larger planets
+    if (from.planetLevel > maxPlanetLevel) {
+        return 0;
+    }
 
-  const candidates_ = df.getPlanetsInRange(fromId, maxDistributeEnergyPercent)
-    .filter(p => (
-      p.owner !== df.account &&
-      players.includes(p.owner) &&
-      p.planetLevel >= minCaptureLevel &&
-      p.planetType === planetType
-    ))
-    .map(to => {
-      return [to, distance(from, to)]
-    })
-    .sort((a, b) => a[1] - b[1]);
+    // Don't crawl from asteroids
+    if (from.planetType == PlanetType.ASTEROID) {
+        return 0;
+    }
 
-  let i = 0;
-  const energyBudget = Math.floor((maxDistributeEnergyPercent / 100) * planet.energy);
-
-  let energySpent = 0;
-  let moves = 0;
-  while (energyBudget - energySpent > 0 && i < candidates_.length) {
-
-    const energyLeft = energyBudget - energySpent;
-
-    // Remember its a tuple of candidates and their distance
-    const candidate = candidates_[i++][0];
-
-    // Rejected if has unconfirmed pending arrivals
-    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId);
+    // Rejected if has pending outbound moves
+    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
     if (unconfirmed.length !== 0) {
-      continue;
+        return 0;
     }
 
-    // Rejected if has pending arrivals
-    const arrivals = getArrivalsForPlanet(candidate.locationId);
-    if (arrivals.length !== 0) {
-      continue;
+    const candidates_ = df.getPlanetsInRange(fromId, maxDistributeEnergyPercent)
+        .filter(p => (
+            p.owner !== df.account &&
+            p.owner === "0x0000000000000000000000000000000000000000" &&
+            p.planetLevel >= minCaptureLevel &&
+            p.planetType !== PlanetType.QUASAR // don't crawl quasars
+        ))
+        .map(to => {
+            return [to, distance(from, to)];
+        })
+        .sort((a, b) => a[1] - b[1]);
+
+    let i = 0;
+    const energyBudget = Math.floor((maxDistributeEnergyPercent / 100) * planet.energy);
+
+    let energySpent = 0;
+    let moves = 0;
+    while (energyBudget - energySpent > 0 && i < candidates_.length) {
+
+        const energyLeft = energyBudget - energySpent;
+
+        // Remember its a tuple of candidates and their distance
+        const candidate = candidates_[i++][0];
+
+        // Rejected if has unconfirmed pending arrivals
+        const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId);
+        if (unconfirmed.length !== 0) {
+            continue;
+        }
+
+        // Rejected if has pending arrivals
+        const arrivals = getArrivalsForPlanet(candidate.locationId);
+        if (arrivals.length !== 0) {
+            continue;
+        }
+
+        // still not sure why this formula is right
+        const energyArriving = (candidate.energyCap * 0.15) + (candidate.energy * (candidate.defense / 100));
+
+        // needs to be a whole number for the contract
+        const energyNeeded = Math.ceil(df.getEnergyNeededForMove(fromId, candidate.locationId, energyArriving));
+        if (energyLeft - energyNeeded < 0) {
+            continue;
+        }
+
+        df.move(fromId, candidate.locationId, energyNeeded, 0);
+        energySpent += energyNeeded;
+        moves += 1;
     }
 
-    const energyArriving = (candidate.energyCap * 0.15) + (candidate.energy * (candidate.defense / 100));
-    // needs to be a whole number for the contract
-    const energyNeeded = Math.ceil(df.getEnergyNeededForMove(fromId, candidate.locationId, energyArriving));
-    if (energyLeft - energyNeeded < 0) {
-      continue;
-    }
-
-    df.move(fromId, candidate.locationId, energyNeeded, 0);
-    energySpent += energyNeeded;
-    moves += 1;
-  }
-
-  return moves;
+    return moves;
 }
 
 function getArrivalsForPlanet(planetId) {
-  return df.getAllVoyages().filter(arrival => arrival.toPlanet === planetId).filter(p => p.arrivalTime > Date.now() / 1000);
+    return df.getAllVoyages().filter(arrival => arrival.toPlanet === planetId).filter(p => p.arrivalTime > Date.now() / 1000);
 }
 
 //returns tuples of [planet,distance]
 function distance(from, to) {
-  let fromloc = from.location;
-  let toloc = to.location;
-  return Math.sqrt((fromloc.coords.x - toloc.coords.x) ** 2 + (fromloc.coords.y - toloc.coords.y) ** 2);
+    let fromloc = from.location;
+    let toloc = to.location;
+    return Math.sqrt((fromloc.coords.x - toloc.coords.x) ** 2 + (fromloc.coords.y - toloc.coords.y) ** 2);
 }
