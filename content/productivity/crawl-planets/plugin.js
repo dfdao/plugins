@@ -25,8 +25,6 @@ class Plugin {
     constructor() {
         this.minPlanetLevel = 3;
         this.maxEnergyPercent = 85;
-        // This is the max level which will crawl for planets
-        this.maxPlanetLevel = { name: 'maxPlanetLevel', value: 4 };
     }
     render(container) {
         container.style.width = '200px';
@@ -82,17 +80,6 @@ class Plugin {
             }
         };
 
-        let inputs = [];
-        const maxPlanetLevel = {
-            name: this.maxPlanetLevel.name,
-            innerText: 'Max planet send level',
-            size: 10,
-            getValueLabel: (value) => { return `Level ${value}`; },
-            uiType: 'dropdown'
-        };
-
-        inputs.push(maxPlanetLevel);
-
         let message = document.createElement('div');
         this.message = message;
 
@@ -140,7 +127,6 @@ class Plugin {
         container.appendChild(percent);
         container.appendChild(levelLabel);
         container.appendChild(level);
-        buildUi(container, inputs, this);
         container.appendChild(button);
         container.appendChild(globalButton);
         container.appendChild(message);
@@ -153,15 +139,35 @@ class RemotePlugin extends Plugin {
 
         this.timers = [];
         this.crawlTimerDuration = 1 * 60 * 1000; // in ms
+
+        // This is the max level which will crawl for planets
+        this.maxPlanetLevel = { name: 'maxPlanetLevel', value: 4 };
     }
 
     render(container) {
         super.render(container);
 
+        let dfdao = document.createElement('div');
+        dfdao.innerText = 'dfdao additions:\n';
+
         let remoteWrapper = document.createElement('div');
-        remoteWrapper.style.display = 'flex';
+        // remoteWrapper.style.display = 'flex'; // this doesn't allow vertical appending
         remoteWrapper.style.justifyContent = 'space-between';
         remoteWrapper.style.marginBottom = '10px';
+
+
+        let inputs = [];
+        const maxPlanetLevel = {
+            name: this.maxPlanetLevel.name,
+            innerText: 'Max planet send level',
+            size: 10,
+            getValueLabel: (value) => { return `Level ${value}`; },
+            uiType: 'dropdown'
+        };
+
+        inputs.push(maxPlanetLevel);
+
+
 
         let everythingLoopButton = document.createElement('button');
         everythingLoopButton.style.width = '100%';
@@ -171,6 +177,11 @@ class RemotePlugin extends Plugin {
             this.loopCrawlEverything();
         };
 
+        remoteWrapper.appendChild(document.createElement('break'));
+        remoteWrapper.appendChild(dfdao);
+        remoteWrapper.appendChild(document.createElement('break'));
+
+        buildUi(remoteWrapper, inputs, this);
         remoteWrapper.appendChild(everythingLoopButton);
 
         container.appendChild(remoteWrapper);
@@ -184,7 +195,7 @@ class RemotePlugin extends Plugin {
             setTimeout(() => {
                 if (moves < MOVE_LIMIT) {
                     // console.log(`max planet level is ${this.maxPlanetLevel.value}`);
-                    moves += capturePlanets(
+                    moves += daoCapturePlanets(
                         planet.locationId,
                         this.minPlanetLevel,
                         this.maxEnergyPercent,
@@ -217,20 +228,9 @@ class RemotePlugin extends Plugin {
 export default RemotePlugin;
 
 
-function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, maxPlanetLevel) {
+function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent) {
     const planet = df.getPlanetWithId(fromId);
     const from = df.getPlanetWithId(fromId);
-
-    // filter to not crawl from larger planets
-    if (from.planetLevel > maxPlanetLevel) {
-        return 0;
-    }
-
-    // Don't crawl from asteroids
-    if (from.planetType == PlanetType.ASTEROID) {
-        return 0;
-    }
-
     // Rejected if has pending outbound moves
     const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
     if (unconfirmed.length !== 0) {
@@ -289,6 +289,27 @@ function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, max
 
     return moves;
 }
+
+function daoCapturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, maxPlanetLevel) {
+  const from = df.getPlanetWithId(fromId);
+
+  // filter to not crawl from larger planets
+  if (from.planetLevel > maxPlanetLevel) {
+      return 0;
+  }
+
+  // Don't crawl from asteroids
+  if (from.planetType == PlanetType.ASTEROID) {
+      return 0;
+  }
+
+  return capturePlanets(
+      from.locationId,
+      this.minPlanetLevel,
+      this.maxEnergyPercent,
+  );
+}
+
 
 function getArrivalsForPlanet(planetId) {
     return df.getAllVoyages().filter(arrival => arrival.toPlanet === planetId).filter(p => p.arrivalTime > Date.now() / 1000);
