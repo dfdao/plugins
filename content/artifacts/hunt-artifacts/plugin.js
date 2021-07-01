@@ -65,7 +65,7 @@ class Plugin {
       message.innerText = 'Please wait...';
 
       let moves = 0;
-      for (let planet of df.getMyPlanets()) {
+      for (let planet of df.getMyPlanets().filter(p => p.planetLevel < 4)) {
         // TODO: Make asteroid check configurable
         if (!isAsteroid(planet)) {
           setTimeout(() => {
@@ -102,7 +102,7 @@ function captureArtifacts(fromId, maxDistributeEnergyPercent) {
   }
 
   const candidates_ = df.getPlanetsInRange(fromId, maxDistributeEnergyPercent)
-    .filter(p => df.isPlanetMineable(p) && p.owner === "0x0000000000000000000000000000000000000000")
+    .filter(p => df.isPlanetMineable(p) && p.owner === "0x0000000000000000000000000000000000000000" && p.planetLevel > 1)
     .map(to => {
       return [to, distance(from, to)]
     })
