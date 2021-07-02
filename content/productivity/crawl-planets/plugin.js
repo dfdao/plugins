@@ -116,6 +116,7 @@ class Plugin {
                         planet.locationId,
                         this.minPlanetLevel,
                         this.maxEnergyPercent,
+
                     );
                     message.innerText = `Crawling ${moves} planets.`;
                 }, 0);
@@ -130,6 +131,9 @@ class Plugin {
         container.appendChild(button);
         container.appendChild(globalButton);
         container.appendChild(message);
+    }
+    destroy (){
+      console.log(`destroying base plugin`);
     }
 }
 
@@ -194,7 +198,6 @@ class RemotePlugin extends Plugin {
         for (let planet of df.getMyPlanets()) {
             setTimeout(() => {
                 if (moves < MOVE_LIMIT) {
-                    // console.log(`max planet level is ${this.maxPlanetLevel.value}`);
                     moves += daoCapturePlanets(
                         planet.locationId,
                         this.minPlanetLevel,
@@ -217,6 +220,7 @@ class RemotePlugin extends Plugin {
     }
 
     destroy() {
+        console.log(`destroying ${this.timers.length} timers`);
         for(let timer of this.timers) {
             clearInterval(timer);
         }
@@ -290,7 +294,7 @@ function capturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent) {
     return moves;
 }
 
-function daoCapturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, maxPlanetLevel) {
+function daoCapturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, maxPlanetLevel = 4) {
   const from = df.getPlanetWithId(fromId);
 
   // filter to not crawl from larger planets
@@ -305,8 +309,8 @@ function daoCapturePlanets(fromId, minCaptureLevel, maxDistributeEnergyPercent, 
 
   return capturePlanets(
       from.locationId,
-      this.minPlanetLevel,
-      this.maxEnergyPercent,
+      minCaptureLevel,
+      maxDistributeEnergyPercent,
   );
 }
 
