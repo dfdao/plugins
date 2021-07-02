@@ -91,7 +91,7 @@ class Plugin {
             let planet = ui.getSelectedPlanet();
             if (planet) {
                 message.innerText = 'Please wait...';
-                let moves = capturePlanets(
+                let moves = daoCapturePlanets(
                     planet.locationId,
                     this.minPlanetLevel,
                     this.maxEnergyPercent,
@@ -112,7 +112,7 @@ class Plugin {
             let moves = 0;
             for (let planet of df.getMyPlanets()) {
                 setTimeout(() => {
-                    moves += capturePlanets(
+                    moves += daoCapturePlanets(
                         planet.locationId,
                         this.minPlanetLevel,
                         this.maxEnergyPercent,
@@ -160,7 +160,7 @@ class RemotePlugin extends Plugin {
         const maxPlanetLevel = {
             name: this.maxPlanetLevel.name,
             innerText: 'Max planet send level',
-            size: 10,
+            size: 7,
             getValueLabel: (value) => { return `Level ${value}`; },
             uiType: 'dropdown'
         };
