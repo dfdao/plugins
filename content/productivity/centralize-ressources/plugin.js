@@ -1,7 +1,3 @@
-import {
-    move
-} from 'https://plugins.zkga.me/utils/queued-move.js';
-
 const MAX_LEVEL_PLANET = 9;
 
 class Plugin {
@@ -158,7 +154,8 @@ function receiveRessources(fromId, maxDistributeEnergyPercent, minPLevel, maxPle
     
             const energyBudget = Math.floor((maxDistributeEnergyPercent / 100) * candidate.energy);
            
-            const maxReceivedEnergyForMove = Math.ceil(df.getEnergyArrivingForMove(candidate.locationId, fromId, energyBudget));
+            const dist = df.getDist(from.locationId, candidate.locationId);
+            const maxReceivedEnergyForMove = Math.ceil(df.getEnergyArrivingForMove(candidate.locationId, fromId, dist, energyBudget));
             // only send enough energy to cap planet
             const receivedEnergyForMove = Math.ceil(maxEnergy - energyReceived - maxReceivedEnergyForMove >= 0? maxReceivedEnergyForMove: maxEnergy - energyReceived);
             // only send enough silver to cap planet
@@ -168,7 +165,7 @@ function receiveRessources(fromId, maxDistributeEnergyPercent, minPLevel, maxPle
                 continue;
             }
     
-            move(candidate.locationId, fromId, energyBudget, receivedSilverForMove);
+            df.move(candidate.locationId, fromId, energyBudget, receivedSilverForMove);
             energyReceived += receivedEnergyForMove;
             silverReceived += receivedSilverForMove;
             moves += 1;
