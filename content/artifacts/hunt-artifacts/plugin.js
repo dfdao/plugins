@@ -29,14 +29,14 @@ class Plugin {
       } catch (e) {
         console.error('could not parse energy percent', e);
       }
-    }
+    };
 
     let message = document.createElement('div');
 
     let button = document.createElement('button');
     button.style.width = '100%';
     button.style.marginBottom = '10px';
-    button.innerHTML = 'Hunt from selected'
+    button.innerHTML = 'Hunt from selected';
     button.onclick = () => {
       let planet = ui.getSelectedPlanet();
       if (planet) {
@@ -50,12 +50,12 @@ class Plugin {
       } else {
         message.innerText = 'No planet selected.';
       }
-    }
+    };
 
     let globalButton = document.createElement('button');
     globalButton.style.width = '100%';
     globalButton.style.marginBottom = '10px';
-    globalButton.innerHTML = 'Globally hunt!'
+    globalButton.innerHTML = 'Globally hunt!';
     globalButton.onclick = () => {
       message.innerText = 'Please wait...';
 
@@ -69,7 +69,7 @@ class Plugin {
           }, 0);
         }
       }
-    }
+    };
 
     container.appendChild(stepperLabel);
     container.appendChild(stepper);
@@ -91,7 +91,7 @@ function captureArtifacts(fromId, maxDistributeEnergyPercent) {
   const from = df.getPlanetWithId(fromId);
 
   // Rejected if has pending outbound moves
-  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId)
+  const unconfirmed = df.getUnconfirmedMoves().filter(move => move.from === fromId);
   if (unconfirmed.length !== 0) {
     return 0;
   }
@@ -99,7 +99,7 @@ function captureArtifacts(fromId, maxDistributeEnergyPercent) {
   const candidates_ = df.getPlanetsInRange(fromId, maxDistributeEnergyPercent)
     .filter(p => df.isPlanetMineable(p) && p.owner === "0x0000000000000000000000000000000000000000" && p.planetLevel > 1)
     .map(to => {
-      return [to, distance(from, to)]
+      return [to, distance(from, to)];
     })
     .sort((a, b) => a[1] - b[1]);
 
@@ -116,7 +116,7 @@ function captureArtifacts(fromId, maxDistributeEnergyPercent) {
     const candidate = candidates_[i++][0];
 
     // Rejected if has unconfirmed pending arrivals
-    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId)
+    const unconfirmed = df.getUnconfirmedMoves().filter(move => move.to === candidate.locationId);
     if (unconfirmed.length !== 0) {
       continue;
     }
