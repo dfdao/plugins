@@ -1,22 +1,22 @@
-// import {
-//   move
-// } from 'https://plugins.zkga.me/utils/queued-move.js';
-
-/**
- Tony 6/30 changes:
- - max move limit of 50 (need to log when each move has gone through)
- - won't crawl for quasars
- - won't use planets > level 4 for crawling
- - won't use asteroids for crawling
- */
-
 import { buildUi } from 'https://dfdao.github.io/utils/ui.js';
+// Crawl Planets
+//
+// Capture unowned planets around you!
+
 const PlanetType = {
     "PLANET": 0,
     "ASTEROID": 1,
     "FOUNDRY": 2,
     "RIP": 3,
     "QUASAR": 4
+}
+
+const planetTypes = {
+  'Planet': 0,
+  'Asteroid': 1,
+  'Foundry': 2,
+  'Spacetime Rip': 3,
+  'Quasar': 4,
 };
 
 const MOVE_LIMIT = 50;
