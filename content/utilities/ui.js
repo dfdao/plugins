@@ -5,6 +5,10 @@
 
  */
 
+/**
+* Helpers
+*/
+
 const getValues = (div) => {
    var boxes = div.getElementsByTagName('input');
    var vals = [];
@@ -14,6 +18,7 @@ const getValues = (div) => {
    return vals;
 };
 const isInDefault = (option, defaults) => { return defaults.includes(option);};
+
 const isEmpty = (array) => {
     //If it's not an array, return FALSE.
     if (!Array.isArray(array)) {
@@ -28,12 +33,41 @@ const isEmpty = (array) => {
     return false;
 };
 
+// rowStyle and colStyle are for the buildTwoColumn function
+const rowStyle = (row) => {
+  const style = document.createElement('style');
+
+  // append to DOM
+  document.head.appendChild(style);
+
+  // insert CSS Rule
+  style.sheet.insertRule(`
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  `);
+  console.log(`style sheet`, style.sheet);
+};
+
+const colStyle = (col) => {
+  col.style.float = 'left';
+  col.style.width ='50%';
+  col.style.padding = '10px';
+};
+
+/**
+* Basic level components (stepper, dropdown, radio, etc)
+* Each component returns an array of HTML Nodes
+*/
+
 export const buildStepper = (stepObj) => {
     const name = stepObj.name;
     const getValueLabel = stepObj.getValueLabel;
     let stepperLabel = document.createElement('label');
     stepperLabel.innerText = stepObj.innerText;
-    stepperLabel.style.display = 'block';
+    // stepperLabel.style.display = 'block';
     let stepper = document.createElement('input');
     stepper.type = 'range';
     stepper.min = stepObj.min;
@@ -48,7 +82,7 @@ export const buildStepper = (stepObj) => {
     stepper.onchange = (evt) => {
         stepperValue.innerText = `${getValueLabel(evt.target.value)}`;
         try {
-            // update of class Object
+            // update of class object
             stepObj.value = parseInt(evt.target.value, 10); // assuming values are integers
         }
         catch (e) {
@@ -76,7 +110,7 @@ export const buildRadios = (radioObj) => {
     //const getValueLabel = radioObj.getValueLabel;
     let radioLabel = document.createElement('label');
     radioLabel.innerText = radioObj.innerText;
-    radioLabel.style.display = 'block';
+    // radioLabel.style.display = 'block';
     const onClick = (evt) => {
       console.log('evt', evt.target.value);
       //console.log(evt);
@@ -99,18 +133,15 @@ export const buildRadios = (radioObj) => {
     return [radioLabel, radioGroup];
   };
 
-// Returns an array: [levelLabel, level]
-// Need to pass class instance in order to update variables.
-// Append to the DOM in given order.
 export const buildDropdown = (dropObj) => {
     const getValueLabel = dropObj.getValueLabel;
     const name = dropObj['name'];
     let levelLabel = document.createElement('label');
     levelLabel.innerText = dropObj.innerText;
-    levelLabel.style.display = 'block';
+    // levelLabel.style.display = 'block';
     let level = document.createElement('select');
     level.style.background = 'rgb(8,8,8)';
-    level.style.width = '100%';
+    // level.style.width = '100%';
     level.style.marginTop = '10px';
     level.style.marginBottom = '10px';
     Array.from(Array(dropObj.size).keys()).forEach(lvl => {
@@ -169,7 +200,6 @@ export const buildCheckboxes = (checkObj) => {
   return [checkboxLabel, checkbox];
 };
 
-// builds an HTML button
 export const buildButton = (buttonObj) => {
   let button = document.createElement('button');
   //button.style.width = '100%';
@@ -179,13 +209,14 @@ export const buildButton = (buttonObj) => {
   return [button];
 };
 
-// items is a list of objects with the following structure:
+// table items is a list of objects with the following structure:
 // table data structure
 /**
   [
     {
-      head1: htmlNode
-      head2: htmlNode
+      head1: htmlNode || string,
+      head2: htmlNode || string,
+      ...
     },
     {
       ...
@@ -267,57 +298,6 @@ export const buildTable = (tableObj) => {
 
 };
 
-const rowStyle = (row) => {
-  const style = document.createElement('style');
-
-  // append to DOM
-  document.head.appendChild(style);
-
-  // insert CSS Rule
-  style.sheet.insertRule(`
-    .row:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-  `);
-  console.log(`style sheet`, style.sheet);
-};
-
-const colStyle = (col) => {
-  col.style.float = 'left';
-  col.style.width ='50%';
-  col.style.padding = '10px';
-};
-
-export const buildTwoColumn = (colObj) => {
-  let colDiv = document.createElement('div');
-  colDiv.className = 'row';
-  let col1 = document.createElement('div');
-  let col2 = document.createElement('div');
-
-  let head1 = document.createElement('span');
-  head1.style.color = 'green'; // apply your style
-  head1.appendChild(document.createTextNode(colObj.head1));
-
-  let head2 = document.createElement('span');
-  head2.style.color = 'green'; // apply your style
-  head2.appendChild(document.createTextNode(colObj.head2));
-
-  col1.appendChild(head1);
-  col2.appendChild(head2);
-  col1.appendChild(colObj.node1);
-  col2.appendChild(colObj.node2);
-  colStyle(col1);
-  colStyle(col2);
-
-  colDiv.appendChild(col1);
-  colDiv.appendChild(col2);
-  rowStyle(colDiv);
-  console.log(`colDiv`, colDiv);
-  return [colDiv];
-};
-
 export const buildInput = (inputObj) => {
   let label = document.createElement('label');
   label.for = inputObj.innerText;
@@ -330,110 +310,157 @@ export const buildInput = (inputObj) => {
   return [label, input];
 };
 
-// appends elements to the DOM from list.
-export const appendListToDom = (container, eltList) => {
-  console.log(`eltList`, eltList);
-    try {
-        for (const [index, elt] of eltList.entries()) {
-          // console.log(`dom elt\n`, elt);
-          container.appendChild(elt);
-        }
-    }
-    catch (e) {
-        console.log('append to DOM error', e);
-    }
-};
-
-
-export const appendChildTo = (node, child) => {
-  return node.appendChild(child);
-};
-
-// append to div or span instead of general container
-export const appendListToNode = (eltList, type) => {
-  let node;
-  switch (type) {
-      case 'div':
-          node = document.createElement('div');
-          break;
-      case 'span':
-          node = document.createElement('span');
-          break;
-      default:
-        node = document.createElement('div');
-        break;
-  }
-  console.log('type is ', node);
-  appendListToDom(node, eltList);
-  return node;
-};
-
-export const buildNodeList = (objList) => {
-  let elements = [];
-  for (const obj of objList) {
-    elements.push(getNode(obj));
-  }
-  return elements.flat();
-};
 
 // put everything in a span then a div
 export const buildSpan = (spanObj) => {
   const spanList = spanObj.spanList;
   let div = document.createElement('div');
   // a flattened list of nodes
-  const spanNodes = buildNodeList(spanObj.spanList);
-  let span = appendListToNode(spanNodes,'span');
+  const spanNodes = buildNodeList(spanList);
+  let span = appendListToParent(spanNodes,'span');
   div.appendChild(span);
   return [div];
+};
+
+export const buildTwoColumn = (colObj) => {
+  const headers = colObj.headers
+  const nodes = colObj.nodes
+
+  let colDiv = document.createElement('div');
+  colDiv.className = 'row';
+
+  if (headers.length != nodes.length) {
+    return [colDiv]; // empty value
+  }
+
+
+  for (var i = 0; i < headers.length; i++) {
+    let currHead = document.createElement('span');
+
+    currHead.style.color = 'green'; // apply your style
+    currHead.appendChild(document.createTextNode(headers[i]));
+
+    let currCol = document.createElement('div');
+    const currNodeList = nodes[i];
+
+    currCol.appendChild(currHead); // add header
+    buildUi(currCol, currNodeList); // add elements
+
+    colStyle(currCol);
+
+    colDiv.appendChild(currCol); // append to parent Div
+  }
+
+  rowStyle(colDiv);
+  console.log(`colDiv`, colDiv);
+  return [colDiv];
+
+};
+
+/**
+* Functions to concatenate and manipulate components
+*/
+
+
+// appends elements to the node from list.
+export const appendList = (node, eltList) => {
+  console.log(`eltList`, eltList);
+    try {
+        for (const [index, elt] of eltList.entries()) {
+          node.appendChild(elt);
+        }
+    }
+    catch (e) {
+        console.log('append to node error', e);
+    }
+};
+
+
+// append everything in eltList to given node type
+// returns a div with all elements in eltList appended
+export const appendListToParent = (eltList, type = 'div', node) => {
+  let newNode;
+  switch (type) {
+      case 'div':
+        newNode = document.createElement('div');
+        appendList(newNode, eltList);
+        break;
+      case 'span':
+        let span = document.createElement('span');
+        newNode = document.createElement('div');
+        appendList(span, eltList);
+        newNode.appendChild(span);
+        break;
+      case 'other': // for DOM containers
+        if (node)
+          newNode = node;
+          appendList(newNode, eltList);
+        break;
+      default:
+        newNode = document.createElement('div');
+        break;
+  }
+  // console.log('type is ', node);
+  // appendList(newNode, eltList);
+  return newNode;
 };
 
 export const getNode = (obj) => {
   switch (obj.uiType) {
       case 'dropdown':
           return buildDropdown(obj);
-          break;
       case 'stepper':
           return buildStepper(obj);
-          break;
       case 'checkbox':
           return buildCheckboxes(obj);
-          break;
       case 'button':
           return buildButton(obj);
-          break;
       case 'radio':
           return buildRadios(obj);
-          break;
       case 'table':
           return buildTable(obj);
-          break;
       case 'column':
           return buildTwoColumn(obj);
-          break;
       case 'input':
           return buildInput(obj);
-          break;
       case 'break':
-          return document.createElement('br');
-          break;
+          return [document.createElement('br')];
       case 'span':
         return buildSpan(obj);
-        break;
       default:
           return;
   }
 };
 
-// wrapper that appends the node to a div
-export const buildNode = (obj, type) => {
-  let result = getNode(obj);
-  return appendListToNode(result, type);
+
+export const getNodeWithParent = (obj) => {
+  // get list of elts from getNode
+  const nodeList = getNode(obj);
+  // append all to specified type (div or span)
+  console.log(`obj parentType`, obj.parentType)
+  const newDiv = appendListToParent(nodeList, obj.parentType);
+  return newDiv;
+};
+
+export const buildNodeList = (objList) => {
+  let elements = [];
+  for (const obj of objList) {
+    elements.push(getNodeWithParent(obj));
+  }
+  return elements; //.flat() don't need to flatten b/c all items from getNodeWithParent are divs
 };
 
 
 // In plugin constructor, call: buildUi(container, inputs, this);
 // where inputs is the list of type stepObj or dropObj and *this* is the plugin class
+//
+// export const buildUi = (parentType, objList) => {
+//     const elements = buildNodeList(objList);
+//     appendListToParent(elements, parentType);
+// };
+
 export const buildUi = (container, objList) => {
     const elements = buildNodeList(objList);
-    appendListToDom(container, elements);
+    appendListToParent(elements, 'other', container);
+    console.log(`UI`, container);
 };

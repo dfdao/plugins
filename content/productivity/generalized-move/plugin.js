@@ -6,10 +6,16 @@
 const { getPlanetName } = df.getProcgenUtils();
 let r = Math.random().toString(36).substring(7);
 
-const url = 'test';
-import { buildUi, buildNode, buildNodeList } from 'http://127.0.0.1:2222/utilities/ui.js?x=38';
-import { getPlanetType } from 'http://127.0.0.1:2222/utilities/constants.js?x=11';
+import { buildUi } from 'http://127.0.0.1:2222/utilities/ui.js?x=44'; // replace with hosted ui
+import { getPlanetType } from 'http://127.0.0.1:2222/utilities/constants.js?x=11'; // replace with hosted constants
 const PlanetType = getPlanetType();
+
+/**
+  for (obj in inputs) {
+    this[obj.name] = obj
+    this.inputs.push(obj);
+  }
+*/
 
 const logInputs = (inputs) => {
   console.log(`inputs`, inputs);
@@ -17,6 +23,9 @@ const logInputs = (inputs) => {
     console.log(`${i.name}: ${i.value}`);
   }
 };
+
+const baseValueLabel = (value) => `${value}`;
+
 class Plugin {
   constructor() {
     // inputs are variables that store user input
@@ -38,20 +47,42 @@ class Plugin {
 
     this.fromMinPlanetLevel = {
         name: 'fromMinPlanetLevel',
-        innerText: 'Min planet level',
+        innerText: 'Min level ',
         value: 3,
         size: 10,
-        getValueLabel: (value) => { return `Level ${value}`; },
-        uiType: 'dropdown'
+        getValueLabel: baseValueLabel,
+        uiType: 'dropdown',
+        parentType: 'span'
+    };
+
+    this.fromMaxPlanetLevel = {
+        name: 'fromMaxPlanetLevel',
+        innerText: 'Max level ',
+        value: 3,
+        size: 10,
+        getValueLabel: baseValueLabel,
+        uiType: 'dropdown',
+        parentType: 'span'
     };
 
     this.toMinPlanetLevel = {
         name: 'toMinPlanetLevel',
-        innerText: 'Min planet level',
+        innerText: 'Min level ',
         value: 3,
         size: 10,
-        getValueLabel: (value) => { return `Level ${value}`; },
-        uiType: 'dropdown'
+        getValueLabel: baseValueLabel,
+        uiType: 'dropdown',
+        parentType: 'span'
+    };
+
+    this.toMaxPlanetLevel = {
+        name: 'toMaxPlanetLevel',
+        innerText: 'Max level ',
+        value: 3,
+        size: 10,
+        getValueLabel: baseValueLabel,
+        uiType: 'dropdown',
+        parentType: 'span'
     };
 
     this.fromPlanetTypes = {
@@ -126,27 +157,22 @@ class Plugin {
     };
 
     // nodes for columns
-    let node1 = [
+    const node1 = [
       this.fromMinPlanetLevel,
+      this.fromMaxPlanetLevel,
       this.fromPlanetTypes,
       this.fromMinEnergyRemainingPct
     ];
 
-    let node2 = [
+    const node2 = [
       this.toMinPlanetLevel,
+      this.toMaxPlanetLevel,
       this.toPlanetTypes,
     ];
 
-    const node1div = document.createElement('div');
-    buildUi(node1div, node1);
-    const node2div = document.createElement('div');
-    buildUi(node2div, node2);
-
     const myCols = {
-      head1: 'from',
-      head2: 'to',
-      node1: node1div,
-      node2: node2div,
+      headers: ['from', 'to'],
+      nodes: [node1, node2],
       uiType: 'column'
     };
 
@@ -202,11 +228,10 @@ class Plugin {
     this.nodes.push(previewButton);
     this.nodes.push(this.br);
     this.nodes.push(crawlButton);
+
     buildUi(container, this.nodes);
 
 
-
-    let message = document.createElement('div');
     console.log(`container \n`, container);
   }
 

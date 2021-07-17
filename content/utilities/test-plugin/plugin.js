@@ -6,9 +6,14 @@
 const { getPlanetName } = df.getProcgenUtils();
 let r = Math.random().toString(36).substring(7);
 
-import { buildUi } from 'http://127.0.0.1:2222/utilities/ui.js?x=5';
+import { buildUi } from 'http://127.0.0.1:2222/utilities/ui.js?x=1';
 
 console.log(`buildUi ${buildUi}`);
+
+// 1. we need a max level dropdown too for each from and to sections.
+// 2. can we put the drop down next to the "min planet level text".
+// 3. just numbers in the drop down like 1, 2, 3
+// 4. use "min level" instead of planet.
 
 class Plugin {
   constructor() {
