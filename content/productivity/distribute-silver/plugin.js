@@ -33,16 +33,6 @@ class Plugin {
       message.innerText = `Withdrawing silver for Colossus.`;
     }
 
-    container.appendChild(stepperLabel);
-    container.appendChild(stepper);
-    container.appendChild(percent);
-    container.appendChild(levelLabel);
-    container.appendChild(level);
-    container.appendChild(levelAsteroidLabel);
-    container.appendChild(levelAsteroid);
-    container.appendChild(button);
-    container.appendChild(asteroidButton);
-    container.appendChild(toSpaceRiftButton);
     container.appendChild(withdrawtButton);
     container.appendChild(message);
   }
