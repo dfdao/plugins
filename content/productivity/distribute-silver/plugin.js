@@ -27,6 +27,7 @@ class Plugin {
       let rips = df.getMyPlanets().filter(isSpaceRift);
       rips = rips.sort((p1, p2) => p1.silver > p2.silver);
       rips = rips.slice(0,5); 
+      console.log(`rips to send`, rips)
       window.Colossus.handleWithdrawAndReturn(rips);
 
       message.innerText = `Withdrawing silver for Colossus.`;
