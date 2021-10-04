@@ -162,15 +162,10 @@ class Plugin {
 
       let moves = 0;
       let silver = 0;
-      for (let planet of df.getMyPlanets()) {
-        if (isSpaceRift(planet)) {
-          setTimeout(() => {
-            silver += withdrawSilver(planet.locationId);
-            moves += 1;
-            message.innerText = `Withdrawing ${silver} from ${moves} space rifts.`;
-          }, 0);
-        }
-      }
+      const rips = df.getMyPlanets().filter(isSpaceRift);
+      window.Colossus.handleWithdrawAndReturn(rips);
+
+      message.innerText = `Withdrawing silver for Colossus.`;
     }
 
     container.appendChild(stepperLabel);
