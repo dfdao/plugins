@@ -15,6 +15,8 @@ class Plugin {
   render(container) {
     container.style.width = '200px';
 
+    let message = document.createElement('div');
+
     let withdrawtButton = document.createElement('button');
     withdrawtButton.style.width = '100%';
     withdrawtButton.style.marginBottom = '10px';
@@ -32,6 +34,8 @@ class Plugin {
     }
 
     container.appendChild(withdrawtButton);
+    container.appendChild(message);
+
   }
 }
 function isSpaceRift(planet) {
