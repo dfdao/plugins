@@ -162,7 +162,8 @@ class Plugin {
 
       let moves = 0;
       let silver = 0;
-      const rips = df.getMyPlanets().filter(isSpaceRift);
+      let rips = df.getMyPlanets().filter(isSpaceRift);
+      rips = rips.filter((p) => p.silver > 100); 
       window.Colossus.handleWithdrawAndReturn(rips);
 
       message.innerText = `Withdrawing silver for Colossus.`;
