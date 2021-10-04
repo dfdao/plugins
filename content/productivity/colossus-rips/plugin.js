@@ -1,7 +1,5 @@
-// Distribute Silver
-//
-// Distribute your silver!
-
+// Send rips to colossus!
+// note that you must load the Colossus plug-in before running this!
 import {
   PlanetType,
   PlanetLevel,
