@@ -17,153 +17,16 @@ class Plugin {
   render(container) {
     container.style.width = '200px';
 
-    let stepperLabel = document.createElement('label');
-    stepperLabel.innerText = 'Max % energy to spend';
-    stepperLabel.style.display = 'block';
-
-    let stepper = document.createElement('input');
-    stepper.type = 'range';
-    stepper.min = '0';
-    stepper.max = '100';
-    stepper.step = '5';
-    stepper.value = `${this.maxEnergyPercent}`;
-    stepper.style.width = '80%';
-    stepper.style.height = '24px';
-
-    let percent = document.createElement('span');
-    percent.innerText = `${stepper.value}%`;
-    percent.style.float = 'right';
-
-    stepper.onchange = (evt) => {
-      percent.innerText = `${evt.target.value}%`;
-      try {
-        this.maxEnergyPercent = parseInt(evt.target.value, 10);
-      } catch (e) {
-        console.error('could not parse energy percent', e);
-      }
-    }
-    let message = document.createElement('div');
-
-
-    let levelLabel = document.createElement('label');
-    levelLabel.innerText = 'Min. Lvl to send to:';
-    levelLabel.style.display = 'block';
-
-    let level = document.createElement('select');
-    level.style.background = 'rgb(8,8,8)';
-    level.style.width = '100%';
-    level.style.marginTop = '10px';
-    level.style.marginBottom = '10px';
-    Object.values(PlanetLevel).forEach(lvl => {
-      let opt = document.createElement('option');
-      opt.value = `${lvl}`;
-      opt.innerText = PlanetLevelNames[lvl];
-      level.appendChild(opt);
-    });
-    level.value = `${this.minPlanetLevel}`;
-
-    level.onchange = (evt) => {
-      try {
-        this.minPlanetLevel = parseInt(evt.target.value);
-      } catch (e) {
-        console.error('could not parse planet level', e);
-      }
-    }
-
-    // asteroid level
-
-    let levelAsteroidLabel = document.createElement('label');
-    levelAsteroidLabel.innerText = 'Max. Lvl asteroid from:';
-    levelAsteroidLabel.style.display = 'block';
-
-    let levelAsteroid = document.createElement('select');
-    levelAsteroid.style.background = 'rgb(8,8,8)';
-    levelAsteroid.style.width = '100%';
-    levelAsteroid.style.marginTop = '10px';
-    levelAsteroid.style.marginBottom = '10px';
-    Object.values(PlanetLevel).forEach(lvl => {
-      let opt = document.createElement('option');
-      opt.value = `${lvl}`;
-      opt.innerText = PlanetLevelNames[lvl];
-      levelAsteroid.appendChild(opt);
-    });
-    levelAsteroid.value = `${this.maxAsteroidLevel}`;
-
-    levelAsteroid.onchange = (evt) => {
-      try {
-        this.maxAsteroidLevel = parseInt(evt.target.value);
-      } catch (e) {
-        console.error('could not parse planet level', e);
-      }
-    }
-
-
-    // distribute
-
-    let button = document.createElement('button');
-    button.style.width = '100%';
-    button.style.marginBottom = '10px';
-    button.innerHTML = 'Distribute selected'
-    button.onclick = () => {
-      let planet = ui.getSelectedPlanet();
-      if (planet) {
-        distributeSilver(
-          planet.locationId,
-          this.maxEnergyPercent,
-          this.minPlanetLevel
-        );
-      } else {
-        console.log('no planet selected');
-      }
-    }
-
-    let asteroidButton = document.createElement('button');
-    asteroidButton.style.width = '100%';
-    asteroidButton.style.marginBottom = '10px';
-    asteroidButton.innerHTML = 'All to planets'
-    asteroidButton.onclick = () => {
-      message.innerText = 'Please wait...';
-
-      let moves = 0;
-      for (let planet of df.getMyPlanets()) {
-        if (isAsteroid(planet) && planet.planetLevel <= this.maxAsteroidLevel) {
-          setTimeout(() => {
-            moves += distributeSilver(planet.locationId, this.maxEnergyPercent, this.minPlanetLevel, false);
-            message.innerText = `Sending to ${moves} planets.`;
-          }, 0);
-        }
-      }
-    }
-
-    let toSpaceRiftButton = document.createElement('button');
-    toSpaceRiftButton.style.width = '100%';
-    toSpaceRiftButton.style.marginBottom = '10px';
-    toSpaceRiftButton.innerHTML = 'All to space rift';
-    toSpaceRiftButton.onclick = () => {
-      message.innerText = 'Please wait...';
-
-      let moves = 0;
-      for (let planet of df.getMyPlanets()) {
-        if (isAsteroid(planet) && planet.planetLevel <= this.maxAsteroidLevel) {
-          setTimeout(() => {
-            moves += distributeSilver(planet.locationId, this.maxEnergyPercent, this.minPlanetLevel, true);
-            message.innerText = `Sending to ${moves} space rift.`;
-          }, 0);
-        }
-      }
-    }
-
     let withdrawtButton = document.createElement('button');
     withdrawtButton.style.width = '100%';
     withdrawtButton.style.marginBottom = '10px';
-    withdrawtButton.innerHTML = 'Withdraw from space rift';
+    withdrawtButton.innerHTML = 'Withdraw from 5 largest space rifts';
     withdrawtButton.onclick = () => {
       message.innerText = 'Please wait...';
 
-      let moves = 0;
-      let silver = 0;
       let rips = df.getMyPlanets().filter(isSpaceRift);
-      rips = rips.filter((p) => p.silver > 100); 
+      rips = rips.sort((p1, p2) => p1.silver > p2.silver);
+      rips = rips.slice(0,5); 
       window.Colossus.handleWithdrawAndReturn(rips);
 
       message.innerText = `Withdrawing silver for Colossus.`;
