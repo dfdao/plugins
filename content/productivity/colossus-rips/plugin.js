@@ -25,9 +25,16 @@ class Plugin {
       message.innerText = 'Please wait...';
 
       let rips = df.getMyPlanets().filter(isSpaceRift);
+      rips = rips.filter((p) => p.silver > 100);
       rips = rips.sort((p1, p2) => p1.silver > p2.silver);
       rips = rips.slice(0,5); 
       console.log(`rips to send`, rips)
+      if (rips.length == 0) {
+        df.terminal.current.println(`no rips to find. returning...`)
+        message.innerText = 'Try again!';
+        return;
+
+      }
       window.Colossus.handleWithdrawAndReturn(rips);
 
       message.innerText = `Withdrawing silver for Colossus.`;
